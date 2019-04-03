@@ -1,0 +1,46 @@
+一、linux环境关闭suLinux
+vim /etc/sysconfig/selinux
+SELINUX=enforcing 改为 SELINUX=disabled
+
+二、jdk安装
+1.发送jdk到linux
+2.解压安装包
+3.设置环境变量
+    vim /etc/profile
+    export JAVA_HOME=/opt/java/jdk1.8.0_201
+    export PATH=$JAVA_HOME/bin:$PATH
+    export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+
+
+
+三、mysql数据库的linux安装(mysql数据库yum安装)
+1.配置yum源：
+	vim /etc/yum.repos.d/mysql-community.repo
+	
+	[mysql80-community]
+    name=MySQL 8.0 Community Server
+	baseurl=http://repo.mysql.com/yum/mysql-8.0-community/el/7/$basearch/
+	enabled=1
+	gpgcheck=0
+	gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
+2.禁用8.0启用5.7
+	yum-config-manager --disable mysql80-community
+	yum-config-manager --enable mysql57-community
+
+3.安装mysql
+	yum install mysql-community-server
+
+4.启动mysql
+	systemctl start mysqld.service
+
+5.查看初始密码;
+	grep 'temporary password' /var/log/mysqld.log
+
+6.修改密码：
+
+	ALTER USER 'root'@'localhost' IDENTIFIED BY 'MyNewPass4!';
+	
+7.打开访问权限：
+
+	grant all privileges  on *.* to root@'%' identified by "Zhou123456!";
+	
